@@ -35,9 +35,9 @@ Alternatively you can provide credentials as part of the command
 If everything went fine you can expect output similar to following
 
     TIME,KIND,ID,NAME,LINK
-    1581665652,like,111111111,John Doe,https://www.facebook.com/111111111
-    1581663355,like,222222222,Kal Peterson,https://www.facebook.com/222222222
-    1581661970,follow,333333333,Nikol Kus,https://www.facebook.com/333333333
+    1581665652,Like,111111111,John Doe,https://www.facebook.com/111111111
+    1581663355,Like,222222222,Kal Peterson,https://www.facebook.com/222222222
+    1581661970,Follow,333333333,Nikol Kus,https://www.facebook.com/333333333
 
 ### Limitations
 
