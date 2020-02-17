@@ -78,7 +78,7 @@ func resolveSession(c *cli.Context) (*fb.Session, error) {
 	// login
 	session, err := fb.Login(email, pass)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to login", err)
+		return nil, fmt.Errorf("Unable to login: %v", err)
 	}
 
 	return session, nil

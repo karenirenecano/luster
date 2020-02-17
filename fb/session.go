@@ -27,7 +27,7 @@ func Login(email string, password string) (*Session, error) {
 		RedirectLimit: -1,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("Login request failed for email %s", email, err)
+		return nil, fmt.Errorf("Login request failed for email %s: %v", email, err)
 	}
 
 	// get cookies from login response
@@ -41,7 +41,7 @@ func Login(email string, password string) (*Session, error) {
 		}
 	}
 	if uid == "" {
-		return nil, fmt.Errorf("User id was not found in cookies", err)
+		return nil, fmt.Errorf("User id was not found in cookies: %v", err)
 	}
 
 	// go to user home page to find 'fb_dtsg' "secret" needed for next post requests
@@ -49,7 +49,7 @@ func Login(email string, password string) (*Session, error) {
 		Cookies: response.RawResponse.Cookies(),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("Cannot get user page with uid '%s'", uid, err)
+		return nil, fmt.Errorf("Cannot get user page with uid '%s': %v", uid, err)
 	}
 
 	// extract fb_dtsg from hidden input
@@ -76,7 +76,7 @@ func (s *Session) Get(path string, params map[string]string) (string, error) {
 		Params:  params,
 	})
 	if err != nil {
-		return "", fmt.Errorf("Get '%s' failed", url, err)
+		return "", fmt.Errorf("Get '%s' failed: %v", url, err)
 	}
 	return response.String(), nil
 }
@@ -98,7 +98,7 @@ func (s *Session) Post(path string, params map[string]string) (string, error) {
 	}
 	response, err := r.Post(url, ro)
 	if err != nil {
-		return "", fmt.Errorf("Post to '%s' failed", url, err)
+		return "", fmt.Errorf("Post to '%s' failed: %v", url, err)
 	}
 	return response.String(), nil
 }

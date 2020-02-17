@@ -52,13 +52,13 @@ type Fans []Fan
 func (s *Session) OpenPage(name string) (*Page, error) {
 	html, err := s.Get(name, nil)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot open page '%s'", name, err)
+		return nil, fmt.Errorf("Cannot open page '%s': %v", name, err)
 	}
 	// look for meta tag for mobile applications with page id
 	re, _ := regexp.Compile("content=\"fb:\\/\\/page/(\\d+)")
 	m := re.FindStringSubmatch(html)
 	if len(m) == 0 {
-		return nil, fmt.Errorf("Cannot find id for page '%s'", name, err)
+		return nil, fmt.Errorf("Cannot find id for page '%s': %v", name, err)
 	}
 	return &Page{ID: m[1], Name: name, session: s}, nil
 }
@@ -72,14 +72,14 @@ func (p *Page) FetchFans() (Fans, error) {
 	// fetch likers
 	likers, err := p.fetchFans(false, limit)
 	if err != nil {
-		return fans, fmt.Errorf("Cannot fetch likers", err)
+		return fans, fmt.Errorf("Cannot fetch likers: %v", err)
 	}
 	fans = append(fans, likers...)
 
 	// fetch followers
 	followers, err := p.fetchFans(true, limit)
 	if err != nil {
-		return fans, fmt.Errorf("Cannot fetch followers", err)
+		return fans, fmt.Errorf("Cannot fetch followers: %v", err)
 	}
 	fans = append(fans, followers...)
 
@@ -118,7 +118,7 @@ func (p *Page) fetchFansBatch(followers bool, offset int, limit int) (Fans, erro
 		"limit":          strconv.Itoa(limit),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("Cannot fetch fans batch, page id '%s' limit '%d' offset '%d'", p.ID, offset, limit, err)
+		return nil, fmt.Errorf("Cannot fetch fans batch, page id '%s' limit '%d' offset '%d': %v", p.ID, offset, limit, err)
 	}
 
 	// response is in form 'for (;;);JSON', we need to clean it first
