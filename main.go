@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 	"syscall"
 
 	"github.com/zladovan/luster/fb"
@@ -118,30 +117,23 @@ func fetchFans(c *cli.Context) error {
 
 // readInput prints given label and wait for user input which is then returned.
 // Input can be hidden which means characters typed by user are not shown in console.
-// After input is confirmed with [Enter] input line is deleted.
 func readInput(label string, hidden bool) string {
 	// print label to stderr to do not affect stdout which can be then easily stored e.g. to file
-	fmt.Fprintf(os.Stderr, label)
+	fmt.Fprint(os.Stderr, label)
 
 	var input string
 
 	if hidden {
 		// do not dispaly what user is typing
-		passBytes, _ := terminal.ReadPassword(int(syscall.Stderr))
+		passBytes, _ := terminal.ReadPassword(int(syscall.Stdin))
 		input = string(passBytes)
+		fmt.Fprintln(os.Stderr)
 	} else {
 		// display what user is typing
-		scanner := bufio.NewScanner(os.Stderr)
+		scanner := bufio.NewScanner(os.Stdin)
 		scanner.Scan()
 		input = scanner.Text()
-		// move cursor up as new line is started after scanning
-		fmt.Fprintf(os.Stderr, "\033[A")
 	}
-
-	// clear line
-	fmt.Fprintf(os.Stderr, "\r")
-	fmt.Fprintf(os.Stderr, strings.Repeat(" ", len(label)+len(input)))
-	fmt.Fprintf(os.Stderr, "\r")
 
 	return input
 }
